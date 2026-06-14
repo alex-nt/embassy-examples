@@ -38,9 +38,9 @@
           "devices:connected:info" = cmd "List connected devices" "probe-rs list";
         };
 
-        rp-project = "./platform/2350";
+        rp-project = "./platform/rp2350";
         rp = {
-          "device:rp235x:bbqueue-alloc-psram:build" =
+          "device:rp235x:bbqueue-alloc-psram:run" =
             cmd "Build RP235X Blink Async" "(cd ${rp-project}/bbqueue-alloc-psram; cargo run --bin bbqueue-alloc-psram --release)";
         };
 
