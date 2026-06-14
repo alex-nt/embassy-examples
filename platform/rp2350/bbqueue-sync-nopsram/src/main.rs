@@ -7,10 +7,10 @@ use bbqueue::{
     nicknames::Churrasco,
     prod_cons::stream::{StreamConsumer, StreamProducer},
 };
-use core::{slice, sync::atomic::AtomicU8};
+use core::sync::atomic::AtomicU8;
 use defmt::*;
 use embassy_executor::Spawner;
-use embassy_time::{Duration, Ticker, Timer};
+use embassy_time::{Duration, Ticker};
 use static_cell::StaticCell;
 use {defmt_rtt as _, panic_probe as _};
 
@@ -30,25 +30,7 @@ static ATOMIC_COUNTER: AtomicU8 = AtomicU8::new(u8::MIN);
 #[embassy_executor::main]
 async fn main(spawner: Spawner) {
     let config = embassy_rp::config::Config::default();
-    let p = embassy_rp::init(config);
-    let psram_config = embassy_rp::psram::Config::aps6404l();
-    let psram = embassy_rp::psram::Psram::new(
-        embassy_rp::qmi_cs1::QmiCs1::new(p.QMI_CS1, p.PIN_47),
-        psram_config,
-    );
-
-    let Ok(psram) = psram else {
-        error!("PSRAM not found");
-        loop {
-            Timer::after_secs(1).await;
-        }
-    };
-
-    let psram_slice: &mut [u8] = unsafe {
-        let psram_ptr = psram.base_address();
-        let slice: &'static mut [u8] = slice::from_raw_parts_mut(psram_ptr, psram.size() as usize);
-        slice
-    };
+    let _p: embassy_rp::Peripherals = embassy_rp::init(config);
 
     let bb: &'static Churrasco<BUFFER_SIZE> = QUEUE.init(Churrasco::new());
 
@@ -64,7 +46,7 @@ async fn read(consumer: &'static StreamConsumer<BBQUEUE>, delay: Duration) {
     loop {
         if let Ok(rgr) = consumer.read() {
             let len = rgr.len();
-            info!("Read from PSRAM {}", len);
+            info!("Read nr of bytes {}", len);
             for i in 0..len {
                 info!("Read value {}", rgr[i]);
             }
@@ -83,7 +65,7 @@ async fn write(producer: &'static StreamProducer<BBQUEUE>, delay: Duration) {
         wgr[0] = value;
         wgr.commit(1);
 
-        info!("Write to PSRAM {}", value);
+        info!("Write to queue {}", value);
         ticker.next().await;
     }
 }

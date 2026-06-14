@@ -41,7 +41,9 @@
         rp-project = "./platform/rp2350";
         rp = {
           "device:rp235x:bbqueue-alloc-psram:run" =
-            cmd "Build RP235X Blink Async" "(cd ${rp-project}/bbqueue-alloc-psram; cargo run --bin bbqueue-alloc-psram --release)";
+            cmd "Build RP235X BBQUEUE Async" "(cd ${rp-project}/bbqueue-alloc-psram; cargo run --bin bbqueue-alloc-psram --release)";
+          "device:rp235x:bbqueue-sync-nopsram:run" =
+            cmd "Build RP235X BBQUEUE Sync NoPSRAM" "(cd ${rp-project}/bbqueue-sync-nopsram; cargo run --bin bbqueue-sync-nopsram --release)";
         };
 
         command_menu = command-utils.commands.${system} [ (asModule (rp // info))];
