@@ -1,6 +1,6 @@
 [package]
 edition = "2024"
-name = "bbqueue-alloc-psram"
+name = "bbqueue-async-nopsram"
 version = "0.1.0"
 license = "MIT OR Apache-2.0"
 
@@ -80,8 +80,7 @@ embedded-storage = { version = "0.3.1" }
 static_cell = "2.1.1"
 portable-atomic = { version = "1.13.1", features = ["critical-section"] }
 log = "0.4.30"
-embedded-alloc = "0.7.0"
-bbqueue = { version = "0.7.0", features = ["critical-section", "alloc"] }
+bbqueue = { version = "0.7.0", features = ["critical-section"] }
 
 [profile.release]
 debug = 2

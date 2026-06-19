@@ -44,6 +44,8 @@
             cmd "Build RP235X BBQUEUE Async" "(cd ${rp-project}/bbqueue-alloc-psram; cargo run --bin bbqueue-alloc-psram --release)";
           "device:rp235x:bbqueue-sync-nopsram:run" =
             cmd "Build RP235X BBQUEUE Sync NoPSRAM" "(cd ${rp-project}/bbqueue-sync-nopsram; cargo run --bin bbqueue-sync-nopsram --release)";
+          "device:rp235x:bbqueue-async-nopsram:run" =
+            cmd "Build RP235X BBQUEUE Async NoPSRAM" "(cd ${rp-project}/bbqueue-async-nopsram; cargo run --bin bbqueue-async-nopsram --release)";
         };
 
         command_menu = command-utils.commands.${system} [ (asModule (rp // info))];
